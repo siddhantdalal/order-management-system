@@ -85,6 +85,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderDto> getAllOrders() {
+        return orderRepository.findAll().stream()
+                .map(orderMapper::toDto)
+                .toList();
+    }
+
+    @Override
     @Transactional
     @CacheEvict(value = "orders", key = "#id")
     public OrderDto updateStatus(Long id, String status) {

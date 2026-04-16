@@ -43,6 +43,10 @@ export class CartService {
     this.save();
   }
 
+  getItems(): CartItem[] {
+    return [...this.cartItems];
+  }
+
   getTotal(): number {
     return this.cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
   }

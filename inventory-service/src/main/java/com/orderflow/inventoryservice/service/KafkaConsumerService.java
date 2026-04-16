@@ -23,11 +23,19 @@ public class KafkaConsumerService {
     public void handlePaymentEvent(PaymentEvent event) {
         log.info("Received payment event: type={}, orderId={}", event.getEventType(), event.getOrderId());
 
-        if (event.getEventType() == PaymentEvent.Type.PAYMENT_COMPLETED) {
-            // Need to get order items from the payment event context
-            // For now, publish stock reserved/unavailable based on reservation result
-            // The order items will come through the event chain
-            log.info("Payment completed for order: {}, stock reservation handled via order context", event.getOrderId());
+        if (event.getEventType() == PaymentEvent.Type.PAYMENT_COMPLETED && event.getOrderItems() != null) {
+            boolean reserved = inventoryService.reserveStock(
+                    event.getOrderId(),
+                    event.getOrderItems());
+
+            InventoryEvent inventoryEvent = InventoryEvent.builder()
+                    .eventType(reserved ? InventoryEvent.Type.STOCK_RESERVED : InventoryEvent.Type.STOCK_UNAVAILABLE)
+                    .orderId(event.getOrderId())
+                    .items(event.getOrderItems())
+                    .timestamp(LocalDateTime.now())
+                    .build();
+
+            kafkaProducerService.sendInventoryEvent(inventoryEvent);
         }
     }
 
@@ -35,20 +43,7 @@ public class KafkaConsumerService {
     public void handleOrderEvent(OrderEvent event) {
         log.info("Received order event: type={}, orderId={}", event.getEventType(), event.getOrder().getId());
 
-        if (event.getEventType() == OrderEvent.Type.ORDER_PLACED) {
-            boolean reserved = inventoryService.reserveStock(
-                    event.getOrder().getId(),
-                    event.getOrder().getItems());
-
-            InventoryEvent inventoryEvent = InventoryEvent.builder()
-                    .eventType(reserved ? InventoryEvent.Type.STOCK_RESERVED : InventoryEvent.Type.STOCK_UNAVAILABLE)
-                    .orderId(event.getOrder().getId())
-                    .items(event.getOrder().getItems())
-                    .timestamp(LocalDateTime.now())
-                    .build();
-
-            kafkaProducerService.sendInventoryEvent(inventoryEvent);
-        } else if (event.getEventType() == OrderEvent.Type.ORDER_CANCELLED) {
+        if (event.getEventType() == OrderEvent.Type.ORDER_CANCELLED) {
             inventoryService.releaseStock(event.getOrder().getId());
 
             kafkaProducerService.sendInventoryEvent(InventoryEvent.builder()

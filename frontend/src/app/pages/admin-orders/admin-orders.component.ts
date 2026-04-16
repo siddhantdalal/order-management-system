@@ -67,14 +67,9 @@ export class AdminOrdersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Load all orders - admin uses userId 0 to get all, or we iterate
-    // For demo, we'll load for the admin user (they can see all via the admin endpoint pattern)
-    const user = this.authService.getUser();
-    if (user) {
-      this.orderService.getByUserId(user.id).subscribe(res => {
-        this.orders = res.data;
-      });
-    }
+    this.orderService.getAll().subscribe(res => {
+      this.orders = res.data;
+    });
   }
 
   updateStatus(orderId: number, status: string): void {

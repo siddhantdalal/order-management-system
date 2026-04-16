@@ -1,5 +1,6 @@
 package com.orderflow.paymentservice.service;
 
+import com.orderflow.common.dto.OrderItemDto;
 import com.orderflow.common.dto.PaymentDto;
 import com.orderflow.common.event.PaymentEvent;
 import com.orderflow.common.exception.ResourceNotFoundException;
@@ -31,7 +32,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public PaymentDto processPayment(Long orderId, Long userId, BigDecimal amount, String paymentMethod) {
+    public PaymentDto processPayment(Long orderId, Long userId, BigDecimal amount, String paymentMethod, List<OrderItemDto> orderItems) {
         Payment payment = Payment.builder()
                 .orderId(orderId)
                 .userId(userId)
@@ -54,6 +55,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .eventType(eventType)
                 .payment(paymentDto)
                 .orderId(orderId)
+                .orderItems(orderItems)
                 .timestamp(LocalDateTime.now())
                 .build());
 

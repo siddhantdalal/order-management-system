@@ -24,7 +24,8 @@ public class KafkaConsumerService {
                     event.getOrder().getId(),
                     event.getOrder().getUserId(),
                     event.getOrder().getTotalAmount(),
-                    "CREDIT_CARD"
+                    "CREDIT_CARD",
+                    event.getOrder().getItems()
             );
         }
     }

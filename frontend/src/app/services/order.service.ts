@@ -22,6 +22,10 @@ export class OrderService {
     return this.http.get<ApiResponse<Order[]>>(`${this.apiUrl}/user/${userId}`);
   }
 
+  getAll(): Observable<ApiResponse<Order[]>> {
+    return this.http.get<ApiResponse<Order[]>>(`${this.apiUrl}/all`);
+  }
+
   updateStatus(id: number, status: string): Observable<ApiResponse<Order>> {
     return this.http.put<ApiResponse<Order>>(`${this.apiUrl}/${id}/status?status=${status}`, {});
   }

@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,7 +58,7 @@ class PaymentServiceImplTest {
         when(paymentRepository.save(any(Payment.class))).thenReturn(savedPayment);
         when(paymentMapper.toDto(savedPayment)).thenReturn(paymentDto);
 
-        PaymentDto result = paymentService.processPayment(1L, 1L, new BigDecimal("50.00"), "CREDIT_CARD");
+        PaymentDto result = paymentService.processPayment(1L, 1L, new BigDecimal("50.00"), "CREDIT_CARD", List.of());
 
         assertNotNull(result);
         assertEquals("COMPLETED", result.getStatus());

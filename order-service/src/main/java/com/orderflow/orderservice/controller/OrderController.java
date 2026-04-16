@@ -40,6 +40,12 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.success(orders));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<OrderDto>>> getAllOrders() {
+        List<OrderDto> orders = orderService.getAllOrders();
+        return ResponseEntity.ok(ApiResponse.success(orders));
+    }
+
     @PutMapping("/{id}/status")
     public ResponseEntity<ApiResponse<OrderDto>> updateStatus(
             @PathVariable Long id,

@@ -69,7 +69,7 @@ export class CheckoutComponent {
   paymentMethod = 'CREDIT_CARD';
   error = '';
   loading = false;
-  cartItems = this.cartService['cartItems'];
+  cartItems = this.cartService.getItems();
 
   constructor(
     public cartService: CartService,
