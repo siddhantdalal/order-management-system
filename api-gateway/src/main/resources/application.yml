@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+jwt:
+  secret: orderflow-secret-key-that-is-at-least-256-bits-long-for-hmac-sha
+  expiration: 86400000
+
+services:
+  order-service:
+    url: http://localhost:8081
+  payment-service:
+    url: http://localhost:8082
+  inventory-service:
+    url: http://localhost:8083
+  notification-service:
+    url: http://localhost:8084
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO

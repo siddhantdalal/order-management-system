@@ -1,0 +1,9 @@
+services:
+  order-service:
+    url: http://order-service:8081
+  payment-service:
+    url: http://payment-service:8082
+  inventory-service:
+    url: http://inventory-service:8083
+  notification-service:
+    url: http://notification-service:8084
