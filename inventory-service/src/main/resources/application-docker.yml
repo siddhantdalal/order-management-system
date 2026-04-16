@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres-inventory:5432/inventory_db
+  data:
+    redis:
+      host: redis
+  kafka:
+    bootstrap-servers: kafka:29092
+
+aws:
+  s3:
+    endpoint: http://localstack:4566
